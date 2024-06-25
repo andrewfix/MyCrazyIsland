@@ -1,0 +1,61 @@
+Wolf:
+  Horse: 10
+  Mouse: 80
+  Rabbit: 60
+  Deer: 15
+  Sheep: 70
+  Boar: 15
+  Goat: 60
+  Buffalo: 10
+Horse:
+  Grass: 100
+  Willow: 10
+Mouse:
+  Caterpillar: 90
+  Grass: 100
+Caterpillar:
+  Grass: 100
+  Willow: 80
+Rabbit:
+  Grass: 100
+  Willow: 90
+Fox:
+  Rabbit: 70
+  Mouse: 90
+  Caterpillar: 40
+Deer:
+  Grass: 100
+  Willow: 100
+Sheep:
+  Grass: 100
+Boa:
+  Fox: 15
+  Rabbit: 20
+  Mouse: 40
+Boar:
+  Mouse: 50
+  Caterpillar: 90
+  Grass: 100
+Bear:
+  Boa: 80
+  Deer: 80
+  Rabbit: 80
+  Mouse: 90
+  Sheep: 70
+  Boar: 50
+  Horse: 40
+  Goat: 70
+  Buffalo: 20
+Goat:
+  Grass: 100
+Eagle:
+  Fox: 10
+  Rabbit: 90
+  Mouse: 90
+Duck:
+  Grass: 100
+  Willow: 100
+  Caterpillar: 90
+Buffalo:
+  Grass: 100
+  Willow: 50
