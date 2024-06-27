@@ -45,7 +45,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.println("Добро пожаловать на сумашедший остров!");
+        System.out.println("Добро пожаловать на сумасшедший остров!");
         showInputValues();
         Utils.showAdvancedInfo = showAdvancedInfo;
         try {
