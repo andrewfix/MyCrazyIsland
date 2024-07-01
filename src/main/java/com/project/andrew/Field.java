@@ -1,10 +1,16 @@
 package com.project.andrew;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.function.Supplier;
 
 public class Field {
+    //  Число строк на поле
+    @Getter
     private int rowCount;
+    //  Число столбцов на поле
+    @Getter
     private int colCount;
     private Cell[][] grid;
 
@@ -19,24 +25,6 @@ public class Field {
                 grid[i][j].addOrganismList(func.get());
             }
         }
-    }
-
-    /**
-     * Возвращеает число строк на поле
-     *
-     * @return
-     */
-    public int getRowCount() {
-        return rowCount;
-    }
-
-    /**
-     * Возвращеает число столбцов на поле
-     *
-     * @return
-     */
-    public int getColCount() {
-        return colCount;
     }
 
     /**

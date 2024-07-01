@@ -1,38 +1,28 @@
 package com.project.andrew;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 public class Cell {
+    //  Координата Y (ордината)
+    @Getter
     private int row;
+    //  Координата X (абцисса)
+    @Getter
     private int col;
+    //  Возвращает список особей на данной клетке
+    @Getter
+    private ConcurrentLinkedQueue<AbstractIslandOrganism> organismList = new ConcurrentLinkedQueue<>();
     //private final List<AbstractIslandOrganism> organismList = new CopyOnWriteArrayList<>();
     //private List<AbstractIslandOrganism> organismList = Collections.synchronizedList(new ArrayList<>());
-    private ConcurrentLinkedQueue<AbstractIslandOrganism> organismList = new ConcurrentLinkedQueue<>();
 
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
-    }
-
-    /**
-     * Возращает номер строки клетки на поле (ее ордината, Y-координата)
-     *
-     * @return
-     */
-    public int getRow() {
-        return row;
-    }
-
-    /**
-     * Возращает номер строки столбца на поле (ее абцисса, X-координата)
-     *
-     * @return
-     */
-    public int getCol() {
-        return col;
     }
 
     /**
@@ -74,15 +64,6 @@ public class Cell {
         organism.setDead();
         organism.setCurrentCell(null);
         return organismList.remove(organism);
-    }
-
-    /**
-     * Возвращает список особей на данной клетке
-     *
-     * @return
-     */
-    public ConcurrentLinkedQueue<AbstractIslandOrganism> getOrganismList() {
-        return organismList;
     }
 
     /**

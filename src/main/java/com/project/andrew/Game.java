@@ -128,9 +128,10 @@ public class Game {
                     List<? extends AbstractIslandOrganism> snapshot;
                     synchronized (list) {
                         snapshot = new ArrayList<>(list.stream().toList());
-                        //  Перемешиваем для равномерного распределения
-                        Collections.shuffle(snapshot);
                     }
+                    //  Перемешиваем для равномерного распределения
+                    Collections.shuffle(snapshot);
+
                     for (var x : snapshot) {
                         tasks.add(organismTask(x));
                     }

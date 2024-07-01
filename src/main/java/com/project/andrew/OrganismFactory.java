@@ -1,6 +1,7 @@
 package com.project.andrew;
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import lombok.Getter;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
@@ -12,8 +13,13 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class OrganismFactory {
+    //  Возвращает все типы организмов
     private final Set<Class<? extends AbstractIslandOrganism>> TYPES = new HashSet<>();
+    //  Возвращает карту прототипов организмов (применяется для их размножения)
     private final Map<Class<? extends AbstractIslandOrganism>, AbstractIslandOrganism> PROTOTYPES = new HashMap<>();
+
+    //  Возвращает карту карт организма и его потенциальных жертв
+    @Getter
     private final Map<Class<? extends AbstractIslandOrganism>, Map<Class<? extends AbstractIslandOrganism>, Integer>> foodConsumptionProbability = new HashMap<>();
     private final String organismClassPackageName = OrganismFactory.class.getPackage().getName() + ".entity";
 
@@ -143,15 +149,6 @@ public class OrganismFactory {
             }
         });
         return list;
-    }
-
-    /**
-     * Возвращает карту карт организма и его потенциальных жертв
-     *
-     * @return
-     */
-    public Map<Class<? extends AbstractIslandOrganism>, Map<Class<? extends AbstractIslandOrganism>, Integer>> getFoodConsumptionProbability() {
-        return foodConsumptionProbability;
     }
 
 }

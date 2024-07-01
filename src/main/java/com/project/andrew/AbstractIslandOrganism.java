@@ -51,12 +51,13 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
     @Getter
     private String name;
 
-    //  Возраст особи. Должна умереть, если возраст превышает LIFE_SPAN
+    //  Возраст особи. Должна умереть, если возраст превышает lifeSpan
     @Getter
     private volatile int age = 0;
 
-    //  Местоположение организма
-    @Getter @Setter
+    //  Местоположение особи
+    @Getter
+    @Setter
     private Cell currentCell;
 
     public AbstractIslandOrganism() {
@@ -99,19 +100,6 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
     }
 
     /**
-     * Устанавливает местоположение особи
-     *
-     * @param currentCell
-     */
-    public void setCurrentCell(Cell currentCell) {
-        this.currentCell = currentCell;
-    }
-
-    public Cell getCurrentCell() {
-        return this.currentCell;
-    }
-
-     /**
      * Прибавляет "год" жизни. Инкримент за ход
      */
     public void incAge() {
@@ -149,7 +137,7 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
 
     @Override
     public String toString() {
-        return "AbstractIslandOrganism{" + "ORGANISM_NAME='" + organismName + '\'' + '\n' + ", LIFE_SPAN=" + lifeSpan + '\n' + ", WEIGHT=" + weight + '\n' + ", OFFSPRING_COUNT=" + offspringCount + '\n' + ", defaultNumberIndividualsInCell=" + defaultNumberIndividualsInCell + '\n' + ", MAX_NUMBER_INDIVIDUALS_IN_CELL=" + maxNumberIndividualsInCell + '\n' + ", name='" + name + '\'' + '\n' + ", age=" + age + '\n' + ", currentCell=(" + currentCell.getRow() + "," + currentCell.getCol() + "," + currentCell.showOrganismStatistic() + ")" + '\n' + '}';
+        return "AbstractIslandOrganism{" + "organismName='" + organismName + '\'' + '\n' + ", lifeSpan=" + lifeSpan + '\n' + ", weight=" + weight + '\n' + ", offspringCount=" + offspringCount + '\n' + ", defaultNumberIndividualsInCell=" + defaultNumberIndividualsInCell + '\n' + ", maxNumberIndividualsInCell=" + maxNumberIndividualsInCell + '\n' + ", name='" + name + '\'' + '\n' + ", age=" + age + '\n' + ", currentCell=(" + currentCell.getRow() + "," + currentCell.getCol() + "," + currentCell.showOrganismStatistic() + ")" + '\n' + '}';
     }
 
     @Override
