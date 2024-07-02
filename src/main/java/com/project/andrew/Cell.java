@@ -13,12 +13,10 @@ public class Cell {
     private int row;
     //  Координата X (абцисса)
     @Getter
-    private int col;
+    private final int col;
     //  Возвращает список особей на данной клетке
     @Getter
-    private ConcurrentLinkedQueue<AbstractIslandOrganism> organismList = new ConcurrentLinkedQueue<>();
-    //private final List<AbstractIslandOrganism> organismList = new CopyOnWriteArrayList<>();
-    //private List<AbstractIslandOrganism> organismList = Collections.synchronizedList(new ArrayList<>());
+    private final ConcurrentLinkedQueue<AbstractIslandOrganism> organismList = new ConcurrentLinkedQueue<>();
 
     public Cell(int row, int col) {
         this.row = row;
@@ -92,8 +90,7 @@ public class Cell {
      * @return
      */
     public Map<Class<? extends AbstractIslandOrganism>, Long> showOrganismStatistic() {
-        final Map<Class<? extends AbstractIslandOrganism>, Long> typeCount = organismList.stream().collect(Collectors.groupingBy(AbstractIslandOrganism::getClass, Collectors.counting()));
-        return typeCount;
+        return organismList.stream().collect(Collectors.groupingBy(AbstractIslandOrganism::getClass, Collectors.counting()));
     }
 
     /**

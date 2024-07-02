@@ -9,7 +9,6 @@ import com.project.andrew.interfaces.Moveable;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
@@ -17,28 +16,20 @@ import java.util.concurrent.*;
 public class Game {
 
     private int step = 0;
-    private int rowCount;
-    private int colCount;
 
-    public Field field;
+    public final Field field;
     //  Инициализация прототипов организмов, карты карт организма и его потенциальных жертв и т.п.
-    private OrganismFactory factory = new OrganismFactory();
-    private EaterService eaterService;
-    private MoveableService moveableService;
-    private ReproductionService reproductionService;
+    private final OrganismFactory factory = new OrganismFactory();
+    private final EaterService eaterService;
+    private final MoveableService moveableService;
+    private final ReproductionService reproductionService;
 
     public Game(int rowCount, int colCount) throws IOException, URISyntaxException, ClassNotFoundException {
-        this.rowCount = rowCount;
-        this.colCount = colCount;
         field = new Field(rowCount, colCount, factory::createOrganismListForCell);
         //  Инициализация "жизненных" сервисов
         eaterService = new EaterService(factory.getFoodConsumptionProbability());
         moveableService = new MoveableService(field);
         reproductionService = new ReproductionService(factory.getPrototypes());
-    }
-
-    private int getStep() {
-        return step;
     }
 
     /**
@@ -62,9 +53,9 @@ public class Game {
             for (int j = 0; j < field.getColCount(); j++) {
                 field.getCell(i, j).showOrganismStatistic().forEach((type, count) -> {
                     AbstractIslandOrganism obj = factory.getPrototypeByType(type);
-                    stringBuilder.append(obj.getIcon() + "-" + count + " ");
+                    stringBuilder.append(obj.getIcon()).append("-").append(count).append(" ");
                 });
-                System.out.print(String.format("%-" + width + "s", stringBuilder.toString()) + " | ");
+                System.out.print(String.format("%-" + width + "s", stringBuilder) + " | ");
                 stringBuilder.setLength(0);
             }
             System.out.println();
@@ -113,7 +104,7 @@ public class Game {
      * @throws ExecutionException
      * @throws InterruptedException
      */
-    private void makeAction() throws ExecutionException, InterruptedException {
+    private void makeAction() throws ExecutionException, InterruptedException, RuntimeException {
         ExecutorService organismListExecutorService = Executors.newFixedThreadPool(600);
         List<Callable<Void>> tasks = new ArrayList<>();
 

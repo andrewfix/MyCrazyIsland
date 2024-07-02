@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
-    public ReentrantLock lock = new ReentrantLock();
+    private ReentrantLock lock = new ReentrantLock();
 
     private static long organismNumber = 0;
 
@@ -49,11 +49,12 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
 
     //  Имя особи
     @Getter
+    @Setter
     private String name;
 
     //  Возраст особи. Должна умереть, если возраст превышает lifeSpan
     @Getter
-    private volatile int age = 0;
+    private int age = 0;
 
     //  Местоположение особи
     @Getter
@@ -88,15 +89,6 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
      */
     private void setName() {
         this.name = this.organismName + "-" + (++organismNumber);
-    }
-
-    /**
-     * Устанавливаем имя особи
-     *
-     * @param name
-     */
-    private void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -160,6 +152,12 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
         /*lock.lock();
         return true;*/
     }
+
+    @Override
+    public boolean isLocked() {
+        return lock.isLocked();
+    }
+
 
     /**
      * Живой или мертвый

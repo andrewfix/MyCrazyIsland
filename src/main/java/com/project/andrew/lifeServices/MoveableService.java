@@ -1,7 +1,6 @@
 package com.project.andrew.lifeServices;
 
 import com.project.andrew.*;
-import com.project.andrew.AbstractIslandAnimal;
 import com.project.andrew.exceptions.OrganismlNotInCellException;
 import com.project.andrew.exceptions.OrganismlTypeMismatchException;
 import com.project.andrew.interfaces.Moveable;

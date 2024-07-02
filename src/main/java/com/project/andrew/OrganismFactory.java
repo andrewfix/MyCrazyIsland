@@ -92,7 +92,7 @@ public class OrganismFactory {
      */
 
     private void init() throws IOException, ClassNotFoundException, URISyntaxException {
-        Path dir = Path.of(OrganismFactory.class.getClassLoader().getResource("organism/config").toURI());
+        Path dir = Path.of(Objects.requireNonNull(OrganismFactory.class.getClassLoader().getResource("organism/config")).toURI());
         Path foodConsumptionProbabilityFile = Path.of(OrganismFactory.class.getClassLoader().getResource("organism/foodConsumptionProbability.yaml").toURI());
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.{yaml,yml}")) {
             for (Path entry : stream) {
@@ -192,7 +192,7 @@ public class OrganismFactory {
      */
     protected List<AbstractIslandOrganism> createOrganismListForCell() {
         List<AbstractIslandOrganism> list = new ArrayList<>();
-        TYPES.stream().forEach(type -> {
+        TYPES.forEach(type -> {
             try {
                 list.addAll(createOrganismListPerType(type));
             } catch (CloneNotSupportedException e) {

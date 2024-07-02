@@ -3,7 +3,6 @@ package com.project.andrew;
 import com.project.andrew.interfaces.Eater;
 import com.project.andrew.interfaces.Moveable;
 import lombok.Getter;
-import lombok.Setter;
 
 public abstract class AbstractIslandAnimal extends AbstractIslandOrganism implements Moveable, Eater<AbstractIslandOrganism> {
     //  Максимальная скорость перемещения (число клеток за ход)
