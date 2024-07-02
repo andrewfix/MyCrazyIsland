@@ -8,11 +8,11 @@ import java.util.function.Supplier;
 public class Field {
     //  Число строк на поле
     @Getter
-    private int rowCount;
+    private final int rowCount;
     //  Число столбцов на поле
     @Getter
-    private int colCount;
-    private Cell[][] grid;
+    private final int colCount;
+    private final Cell[][] grid;
 
     public Field(int m, int n, Supplier<List<AbstractIslandOrganism>> func) {
         rowCount = m;
@@ -32,7 +32,7 @@ public class Field {
      *
      * @param row
      * @param col
-     * @return
+     * @return Cell
      */
     public Cell getCell(int row, int col) {
         return grid[row][col];
@@ -54,7 +54,7 @@ public class Field {
     /**
      * Возвращает число особей на поле
      *
-     * @return
+     * @return int
      */
     public int getOrganismCount() {
         int numOrganism = 0;

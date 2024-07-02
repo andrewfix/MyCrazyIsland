@@ -1,7 +1,10 @@
 package com.project.andrew;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import lombok.Getter;
+import net.bytebuddy.ByteBuddy;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
@@ -11,6 +14,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+
 
 public class OrganismFactory {
     //  Возвращает все типы организмов
@@ -38,9 +42,43 @@ public class OrganismFactory {
 
     private AbstractIslandOrganism loadObject(URL resource, Class<? extends AbstractIslandOrganism> type) throws IOException {
         YAMLMapper yamlMapper = new YAMLMapper();
+        //  Игнорируем свойства в файле, которые не описаны в классе
+        yamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         AbstractIslandOrganism organism = yamlMapper.readValue(resource, type);
         organism.init();
         return organism;
+    }
+
+    /**
+     * Читает yaml-файл и возвращает карту параметр-значение
+     *
+     * @param resource
+     * @return
+     * @throws IOException
+     */
+    private Map<String, String> getDataFromYaml(URL resource) throws IOException {
+        YAMLMapper yamlMapper = new YAMLMapper();
+        Map<String, String> map = yamlMapper.readValue(resource, new TypeReference<Map<String, String>>() {
+        });
+        return map;
+    }
+
+    /**
+     * Динамически создает и возвращает класс
+     *
+     * @param className
+     * @param baseClassName
+     * @return
+     * @throws ClassNotFoundException
+     */
+    private Class<? extends AbstractIslandOrganism> createClassFromName(String className, String baseClassName) throws ClassNotFoundException {
+        Class<?> baseClass = Class.forName(baseClassName);
+        return (Class<? extends AbstractIslandOrganism>) new ByteBuddy()
+                .subclass(baseClass)
+                .name(className)
+                .make()
+                .load(getClass().getClassLoader())
+                .getLoaded();
     }
 
     /**
@@ -52,12 +90,22 @@ public class OrganismFactory {
      * @throws ClassNotFoundException
      * @throws URISyntaxException
      */
+
     private void init() throws IOException, ClassNotFoundException, URISyntaxException {
         Path dir = Path.of(OrganismFactory.class.getClassLoader().getResource("organism/config").toURI());
         Path foodConsumptionProbabilityFile = Path.of(OrganismFactory.class.getClassLoader().getResource("organism/foodConsumptionProbability.yaml").toURI());
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.{yaml,yml}")) {
             for (Path entry : stream) {
-                Class<? extends AbstractIslandOrganism> clazz = (Class<? extends AbstractIslandOrganism>) Class.forName(organismClassPackageName + "." + FilenameUtils.getBaseName(entry.toString()));
+                Class<? extends AbstractIslandOrganism> clazz = null;
+                String className = organismClassPackageName + "." + FilenameUtils.getBaseName(entry.toString());
+                try {
+                    clazz = (Class<? extends AbstractIslandOrganism>) Class.forName(className);
+                } catch (ClassNotFoundException e) {
+                    //  если класс не найден, создаем его динамически
+                    var map = getDataFromYaml(entry.toUri().toURL());
+                    String parentClassName = OrganismFactory.class.getPackage().getName() + "." + map.get("baseClassName");
+                    clazz = createClassFromName(className, parentClassName);
+                }
                 TYPES.add(clazz);
                 AbstractIslandOrganism organism = loadObject(entry.toUri().toURL(), clazz);
                 PROTOTYPES.put(clazz, organism);
@@ -79,8 +127,11 @@ public class OrganismFactory {
         for (var entry : tempMap.entrySet()) {
             Class<? extends AbstractIslandOrganism> keyClass = null;
             try {
-                keyClass = (Class<? extends AbstractIslandOrganism>) Class.forName(organismClassPackageName + "." + entry.getKey());
-            } catch (ClassNotFoundException e) {
+                //  Т.к классы могут быть созданны динамически, а ClassLoader для них не определен,
+                //  то используем для создания объектов наши TYPES, тем самым не нарушая безопасность и
+                //  не усложняя проект. (вместо Class.forName)
+                keyClass = TYPES.stream().filter(x -> x.getName().equals(organismClassPackageName + "." + entry.getKey())).findFirst().get();
+            } catch (Exception/*ClassNotFoundException*/ e) {
                 //  Если данный класс не найден, игнорируем его
                 continue;
             }
@@ -88,8 +139,8 @@ public class OrganismFactory {
             for (var innerEntry : entry.getValue().entrySet()) {
                 Class<? extends AbstractIslandOrganism> innerKeyClass = null;
                 try {
-                    innerKeyClass = (Class<? extends AbstractIslandOrganism>) Class.forName(organismClassPackageName + "." + innerEntry.getKey());
-                } catch (ClassNotFoundException e) {
+                    innerKeyClass = TYPES.stream().filter(x -> x.getName().equals(organismClassPackageName + "." + innerEntry.getKey())).findFirst().get();
+                } catch (Exception/*ClassNotFoundException*/ e) {
                     //  Если данный класс не найден, игнорируем его
                     continue;
                 }
@@ -125,7 +176,7 @@ public class OrganismFactory {
     }
 
     /**
-     * Возвоащает прототип организма
+     * Возвращает прототип организма
      *
      * @param type
      * @return
@@ -150,5 +201,4 @@ public class OrganismFactory {
         });
         return list;
     }
-
 }

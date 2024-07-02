@@ -123,7 +123,7 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
                 throw new OrganismlIsDieException();
             }
             //  Возвращает число особей, которые должны "умереть",
-            //  чтобы общее число особей данного вида на клетке не превышало MAX_NUMBER_INDIVIDUALS_IN_CELL
+            //  чтобы общее число особей данного вида на клетке не превышало maxNumberIndividualsInCell
             long mustDieCount = this.currentCell.getOrganismPerCell(this.getClass()).size() + list.size() - maxNumberIndividualsInCell;
             if (mustDieCount > 0) {
                 //  Если такие есть, то они "умирают"
