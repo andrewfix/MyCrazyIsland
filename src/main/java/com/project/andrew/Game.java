@@ -105,50 +105,51 @@ public class Game {
      * @throws InterruptedException
      */
     private void makeAction() throws ExecutionException, InterruptedException, RuntimeException {
-        ExecutorService organismListExecutorService = Executors.newFixedThreadPool(600);
-        List<Callable<Void>> tasks = new ArrayList<>();
+        try (ExecutorService organismListExecutorService = Executors.newFixedThreadPool(600)) {
+            List<Callable<Void>> tasks = new ArrayList<>();
 
-        try {
-            for (int i = 0; i < field.getRowCount(); i++) {
-                for (int j = 0; j < field.getColCount(); j++) {
-                    int finalI = i;
-                    int finalJ = j;
-
-                    var list = field.getCell(finalI, finalJ).getOrganismList();
-                    //  Делаем "снимок" списка, чтобы избавиться от его изменений во время итераций
-                    List<? extends AbstractIslandOrganism> snapshot;
-                    synchronized (list) {
-                        snapshot = new ArrayList<>(list.stream().toList());
-                    }
-
-                    for (var x : snapshot) {
-                        tasks.add(organismTask(x));
-                    }
-                }
-            }
-
-            //  Перемешиваем для равномерного распределения
-            Collections.shuffle(tasks);
-
-            long startTime = System.currentTimeMillis();
-            List<Future<Void>> futures = organismListExecutorService.invokeAll(tasks);
-            for (Future<Void> future : futures) {
-                try {
-                    future.get();
-                } catch (ExecutionException e) {
-                    throw e;
-                }
-            }
-            long endTime = System.currentTimeMillis();
-            System.out.println("Completed in " + (endTime - startTime) + " ms");
-        } finally {
-            organismListExecutorService.shutdown();
             try {
-                if (!organismListExecutorService.awaitTermination(800, TimeUnit.SECONDS)) {
-                    organismListExecutorService.shutdownNow();
+                for (int i = 0; i < field.getRowCount(); i++) {
+                    for (int j = 0; j < field.getColCount(); j++) {
+                        int finalI = i;
+                        int finalJ = j;
+
+                        var list = field.getCell(finalI, finalJ).getOrganismList();
+                        //  Делаем "снимок" списка, чтобы избавиться от его изменений во время итераций
+                        List<? extends AbstractIslandOrganism> snapshot;
+                        synchronized (list) {
+                            snapshot = new ArrayList<>(list.stream().toList());
+                        }
+
+                        for (var x : snapshot) {
+                            tasks.add(organismTask(x));
+                        }
+                    }
                 }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
+                //  Перемешиваем для равномерного распределения
+                Collections.shuffle(tasks);
+
+                long startTime = System.currentTimeMillis();
+                List<Future<Void>> futures = organismListExecutorService.invokeAll(tasks);
+                for (Future<Void> future : futures) {
+                    try {
+                        future.get();
+                    } catch (ExecutionException e) {
+                        throw e;
+                    }
+                }
+                long endTime = System.currentTimeMillis();
+                System.out.println("Completed in " + (endTime - startTime) + " ms");
+            } finally {
+                organismListExecutorService.shutdown();
+                try {
+                    if (!organismListExecutorService.awaitTermination(800, TimeUnit.SECONDS)) {
+                        organismListExecutorService.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
