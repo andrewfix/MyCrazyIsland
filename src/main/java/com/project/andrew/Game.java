@@ -120,14 +120,15 @@ public class Game {
                     synchronized (list) {
                         snapshot = new ArrayList<>(list.stream().toList());
                     }
-                    //  Перемешиваем для равномерного распределения
-                    Collections.shuffle(snapshot);
 
                     for (var x : snapshot) {
                         tasks.add(organismTask(x));
                     }
                 }
             }
+
+            //  Перемешиваем для равномерного распределения
+            Collections.shuffle(tasks);
 
             long startTime = System.currentTimeMillis();
             List<Future<Void>> futures = organismListExecutorService.invokeAll(tasks);
