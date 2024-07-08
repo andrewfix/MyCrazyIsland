@@ -38,7 +38,10 @@ public class EaterService implements Consumer<Eater> {
      * @return
      */
     private List<? extends AbstractIslandOrganism> getPreyList(AbstractIslandOrganism obj) {
-        ArrayList<AbstractIslandOrganism> preyList = obj.getCurrentCell().getOrganismList().stream().filter(item -> (foodMap.get(obj.getClass()).containsKey(item.getClass()) && !item.isLocked())).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<AbstractIslandOrganism> preyList = obj.getCurrentCell().getOrganismList()
+                .stream()
+                .filter(item -> foodMap.get(obj.getClass()).containsKey(item.getClass()) && !item.isLocked())
+                .collect(Collectors.toCollection(ArrayList::new));
         return preyList.isEmpty() ? null : preyList;
     }
 
@@ -104,7 +107,7 @@ public class EaterService implements Consumer<Eater> {
                         } finally {
                             Utils.showText(prey.getName() + " разблокирован как жертва");
                             prey.unlock();
-                            return;
+                            break;
                         }
 
                     }

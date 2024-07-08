@@ -41,7 +41,7 @@ public class Main {
             scanner.next();
         }
         String s = scanner.next();
-        showAdvancedInfo = (s.equalsIgnoreCase("Y") ? true : false);
+        showAdvancedInfo = s.equalsIgnoreCase("Y");
     }
 
     public static void main(String[] args) {

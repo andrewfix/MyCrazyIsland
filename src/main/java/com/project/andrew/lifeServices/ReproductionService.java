@@ -71,7 +71,8 @@ public class ReproductionService implements Consumer<AbstractIslandOrganism> {
                     try {
                         var partnerList = x.getCurrentCell().getOrganismPerCell(x.getClass())
                                 .stream()
-                                .filter(s -> (s != x && !s.isDead() && (s.getAge() >= s.getMinimumReproductiveAge()) && !s.isLocked())).toList();
+                                .filter(s -> s != x && !s.isDead() && s.getAge() >= s.getMinimumReproductiveAge() && !s.isLocked())
+                                .toList();
                         if (partnerList == null || partnerList.isEmpty()) {
                             Utils.showText(x.getName() + " не нашел партнера для размножения");
                             return;
