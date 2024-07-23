@@ -79,7 +79,7 @@ public class EaterService implements Consumer<Eater> {
 
         Utils.showText(x.getName() + " готовится к охоте");
 
-        if (x.tryLock()) {
+        if (x.lock()) {
             try {
                 if (x.isDead()) {
                     return;
@@ -90,7 +90,7 @@ public class EaterService implements Consumer<Eater> {
                     Utils.showText(x.getName() + " попытка-" + (attempts + 1));
                     Utils.showText(x.getName() + " ищет жертву ...");
                     var prey = getPrey(x);
-                    if (prey != null && prey.tryLock()) {
+                    if (prey != null && prey.lock()) {
                         Utils.showText(prey.getName() + " заблокирован как жертва от " + x.getName());
                         try {
                             if (!prey.isDead()) {

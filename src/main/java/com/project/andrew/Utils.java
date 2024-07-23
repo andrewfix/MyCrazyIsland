@@ -1,6 +1,6 @@
 package com.project.andrew;
 
-public class Utils {
+public final class Utils {
     public static boolean showAdvancedInfo = false;
 
     public static void showText(String string) {

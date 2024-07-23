@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 public class Main {
 
     static Game game;
-    static int numRows = 10;
-    static int numCols = 10;
-    static int stepCount = 21;
+    static int numRows;
+    static int numCols;
+    static int stepCount;
     static boolean showAdvancedInfo = true;
 
     private static void showInputValues() {

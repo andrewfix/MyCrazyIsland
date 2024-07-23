@@ -19,12 +19,13 @@ public class Game {
 
     public final Field field;
     //  Инициализация прототипов организмов, карты карт организма и его потенциальных жертв и т.п.
-    private final OrganismFactory factory = new OrganismFactory();
+    private final OrganismFactory factory;
     private final EaterService eaterService;
     private final MoveableService moveableService;
     private final ReproductionService reproductionService;
 
     public Game(int rowCount, int colCount) throws IOException, URISyntaxException, ClassNotFoundException {
+        factory = new OrganismFactory();
         field = new Field(rowCount, colCount, factory::createOrganismListForCell);
         //  Инициализация "жизненных" сервисов
         eaterService = new EaterService(factory.getFoodConsumptionProbability());

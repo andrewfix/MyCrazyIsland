@@ -16,20 +16,12 @@ public class Cell {
     private final int col;
     //  Возвращает список особей на данной клетке
     @Getter
-    private final ConcurrentLinkedQueue<AbstractIslandOrganism> organismList = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<AbstractIslandOrganism> organismList;
 
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
-    }
-
-    /**
-     * Возвращает текст координаты ячейки
-     *
-     * @return
-     */
-    public String showCellPosition() {
-        return "(" + row + "," + col + ")";
+        organismList = new ConcurrentLinkedQueue<>();
     }
 
     /**

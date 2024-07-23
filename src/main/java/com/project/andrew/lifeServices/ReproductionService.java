@@ -58,7 +58,7 @@ public class ReproductionService implements Consumer<AbstractIslandOrganism> {
         if (x.getAge() < x.getMinimumReproductiveAge()) {
             return;
         }
-        if (x.tryLock()) {
+        if (x.lock()) {
             try {
                 if (x.isDead()) {
                     return;
@@ -85,7 +85,7 @@ public class ReproductionService implements Consumer<AbstractIslandOrganism> {
                     }
                 }
 
-                if (partner.tryLock()) {
+                if (partner.lock()) {
                     try {
                         Utils.showText(x.getName() + " нашел " + partner.getName() + " и начинает размножение");
                         Utils.showText(partner.getName() + " заблокирован как партнер");

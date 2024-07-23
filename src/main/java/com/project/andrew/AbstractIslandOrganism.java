@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
-    private ReentrantLock lock = new ReentrantLock();
+    private ReentrantLock lock;
 
     private static long organismNumber = 0;
 
@@ -63,6 +63,7 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
 
     public AbstractIslandOrganism() {
         this.setName();
+        lock = new ReentrantLock();
     }
 
     public void init() {
@@ -138,7 +139,7 @@ public abstract class AbstractIslandOrganism implements Lockable, Cloneable {
     }
 
     @Override
-    public boolean tryLock() {
+    public boolean lock() {
         //  Специально переопределял методы блокировки.
         // Варианты блокировки между lock и tryLock с параметром и без оного
 

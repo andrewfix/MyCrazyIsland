@@ -18,16 +18,19 @@ import java.util.*;
 
 public class OrganismFactory {
     //  Возвращает все типы организмов
-    private final Set<Class<? extends AbstractIslandOrganism>> TYPES = new HashSet<>();
+    private final Set<Class<? extends AbstractIslandOrganism>> TYPES;
     //  Возвращает карту прототипов организмов (применяется для их размножения)
-    private final Map<Class<? extends AbstractIslandOrganism>, AbstractIslandOrganism> PROTOTYPES = new HashMap<>();
+    private final Map<Class<? extends AbstractIslandOrganism>, AbstractIslandOrganism> PROTOTYPES;
 
     //  Возвращает карту карт организма и его потенциальных жертв
     @Getter
-    private final Map<Class<? extends AbstractIslandOrganism>, Map<Class<? extends AbstractIslandOrganism>, Integer>> foodConsumptionProbability = new HashMap<>();
+    private final Map<Class<? extends AbstractIslandOrganism>, Map<Class<? extends AbstractIslandOrganism>, Integer>> foodConsumptionProbability;
     private final String organismClassPackageName = OrganismFactory.class.getPackage().getName() + ".entity";
 
     public OrganismFactory() throws IOException, URISyntaxException, ClassNotFoundException {
+        TYPES = new HashSet<>();
+        PROTOTYPES = new HashMap<>();
+        foodConsumptionProbability = new HashMap<>();
         init();
     }
 

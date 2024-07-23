@@ -46,6 +46,14 @@ public class MoveableService implements Consumer<Moveable> {
         return adjacentCells;
     }
 
+    /**
+     * Возвращает текст координаты ячейки
+     *
+     * @return
+     */
+    public String showCellPosition(Cell cell) {
+        return "(" + cell.getRow() + "," + cell.getCol() + ")";
+    }
 
     private void moveTask(AbstractIslandAnimal x) {
         if (!(x instanceof Moveable)) {
@@ -55,7 +63,7 @@ public class MoveableService implements Consumer<Moveable> {
             return;
         }
 
-        if (x.tryLock()) {
+        if (x.lock()) {
             try {
                 if (x.isDead()) {
                     return;
@@ -80,14 +88,14 @@ public class MoveableService implements Consumer<Moveable> {
                         return;
                     }
 
-                    Utils.showText(x.getName() + " решил переместиться из клетки " + x.getCurrentCell().showCellPosition());
+                    Utils.showText(x.getName() + " решил переместиться из клетки " + showCellPosition(x.getCurrentCell()));
 
                     Cell targetCell = adjacentCells.get(ThreadLocalRandom.current().nextInt(adjacentCells.size()));
                     synchronized (targetCell) {
                         if (x.move(targetCell)) {
-                            Utils.showText(x.getName() + " переместился в клетку " + x.getCurrentCell().showCellPosition());
+                            Utils.showText(x.getName() + " переместился в клетку " + showCellPosition(targetCell));
                         } else {
-                            Utils.showText(x.getName() + " нее смог переместиться в клетку " + targetCell.showCellPosition() + (x.isDead() ? " (умер)" : ""));
+                            Utils.showText(x.getName() + " нее смог переместиться в клетку " + showCellPosition(targetCell) + (x.isDead() ? " (умер)" : ""));
                             break;
                         }
                     }
